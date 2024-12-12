@@ -1,0 +1,25 @@
+import requests
+from datetime import datetime, timedelta
+import pandas as pd
+
+# Date Formatting
+today = datetime.today().strftime('%Y-%m-%d')
+oneMonth = (datetime.today() + timedelta(days=31)).strftime('%Y-%m-%d')
+
+# FRED API KEY
+apiKeyFred = 'c7bfbfc6262bdec89c76b29df8810e19'
+
+# AV API KEY
+apiKeyAV = 'H1PL45YBNI1IZDJU'
+
+# First: Pulling Release Dates for Economic Data to Create Macroeconmic Calendar (Retrospectively -- Look into forecasting or if it is already created)
+def econCalendar():
+  url = f"https://api.stlouisfed.org/fred/releases/dates?api_key={apiKeyFred}&file_type=json&realtime_start={today}&realtime_end={oneMonth}"
+  response = requests.get(url)
+  return response.json()
+
+# Second: Pulling Federal Funds Rate Data
+def federalFundsRates():
+  url = f"https://www.alphavantage.co/query?function=FEDERAL_FUNDS_RATE&interval=monthly&apikey={apiKeyAV}"
+  response = requests.get(url)
+  return response.json()
